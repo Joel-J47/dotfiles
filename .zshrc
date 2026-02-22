@@ -60,17 +60,30 @@ alias -g L="| less"
 alias -g H="| head"
 
 #Scripts
-alias adl='/mnt/win_ssd/Users/JOEL/Downloads/Video/animepahe-dl-master/animepahe-dl.sh -o jpn -t 40'
+a# --- OS DETECTION ---
+if [[ -d "/data/data/com.termux" && -z "$PREFIX" ]]; then
+    # Proot
+    alias cat="bat --paging=never"
+    alias update="apt update && apt upgrade -y"
+    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh-theme"
+elif [[ -n "$TERMUX_VERSION" ]]; then
+    # Native Termux
+    alias cat="bat --paging=never"
+    alias update="pkg update && pkg upgrade"
+    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh-theme"
+else
+    # Pop!_OS
+    alias cat="batcat --paging=never"
+    alias update="sudo apt update && sudo apt upgrade -y"
+    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh-theme"
+fi
 
-# End of lines added by compinstall
-source ~/powerlevel10k/powerlevel10k.zsh-theme
-
-# Plugins
+# --- PLUGINS & THEME ---
+source "$P10K_THEME"
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-#source <(fzf --zsh)
-export FZF_DEFAULT_OPTS="--preview 'batcat --color=always --style=numbers --line-range=:500 {}'"
 
+# --- FZF ---
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export FZF_DEFAULT_OPTS="--preview 'cat {}'"
