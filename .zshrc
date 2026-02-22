@@ -64,7 +64,6 @@ alias adl='/mnt/win_ssd/Users/JOEL/Downloads/Video/animepahe-dl-master/animepahe
 
 # End of lines added by compinstall
 source ~/powerlevel10k/powerlevel10k.zsh-theme
-source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # Plugins
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
