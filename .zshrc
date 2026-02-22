@@ -20,7 +20,20 @@ compinit
 # Case-insensitive tab completion
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
-
+# --- OS DETECTION ---
+if [[ -d "/data/data/com.termux" ]]; then
+    # Settings for NATIVE Termux
+    alias cat="bat --paging=never"
+    alias update="pkg update && pkg upgrade"
+    # P10k full path in Termux
+    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh
+else
+    # Settings for Pop!_OS or Proot Ubuntu
+    alias cat="batcat --paging=never"
+    alias update="sudo apt update && sudo apt upgrade -y"
+    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh-theme"
+fi    
+    
 # Navigation
 alias ..="cd .."
 alias ...="cd ../.."
@@ -32,10 +45,10 @@ alias ga="git add ."
 alias gc="git commit -m"
 alias gp="git push"
 alias gl="git log --oneline --graph --all"
-alias cat="batcat --paging=never"
+#alias cat="batcat --paging=never"
 
 # System Maintenance
-alias update="sudo apt update && sudo apt upgrade -y"
+#alias update="sudo apt update && sudo apt upgrade -y"
 alias cls="clear"
 #alias ls="ls --color=auto --group-directories-first"
 #alias ll="ls -lah"
@@ -52,6 +65,7 @@ alias adl='/mnt/win_ssd/Users/JOEL/Downloads/Video/animepahe-dl-master/animepahe
 # End of lines added by compinstall
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 source ~/powerlevel10k/powerlevel10k.zsh-theme
+
 # Plugins
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
