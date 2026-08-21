@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Totomoyo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #eee;
+      overflow: hidden;
+    }
+
+    .orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .orb:nth-child(1) { width: 400px; height: 400px; background: #e040fb; top: -100px; left: -100px; animation-duration: 14s; }
+    .orb:nth-child(2) { width: 300px; height: 300px; background: #00bcd4; bottom: -80px; right: -80px; animation-duration: 10s; }
+    .orb:nth-child(3) { width: 250px; height: 250px; background: #ff6e40; top: 40%; left: 55%; animation-duration: 16s; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, 30px) scale(1.1); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 48px 56px;
+      max-width: 520px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #e040fb, #00bcd4);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #e040fb, #00bcd4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #e040fb, #00bcd4);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 14px 36px;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 24px rgba(224, 64, 251, 0.35);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(224, 64, 251, 0.5);
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #e040fb, #00bcd4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">✦ Random Page</span>
+    <h1>Totomoyo</h1>
+    <p>A quietly drifting corner of the internet. Nothing urgent here — just gradients, blur, and a button that doesn't do much yet.</p>
+    <button class="btn" onclick="this.textContent = '✓ Noted'">Do the thing</button>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-value">42</span>
+        <span class="stat-label">Things</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">∞</span>
+        <span class="stat-label">Vibes</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">0</span>
+        <span class="stat-label">Regrets</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
