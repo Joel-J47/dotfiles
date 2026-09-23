@@ -20,7 +20,13 @@ echo ">>> Installing dnf packages..."
 
 sudo dnf upgrade -y
 
+# Enable RPM Fusion (needed for ffmpeg full, scrcpy, etc.)
 sudo dnf install -y \
+    "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
+    "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" \
+    || true
+
+sudo dnf install -y --skip-unavailable --skip-broken \
     zsh \
     git \
     curl \
@@ -36,7 +42,7 @@ sudo dnf install -y \
     aria2 \
     ffmpeg \
     mpv \
-    ncat \
+    nmap-ncat \
     net-tools \
     rclone \
     rsync \
@@ -51,7 +57,6 @@ sudo dnf install -y \
     xbindkeys \
     python3 \
     python3-pip \
-    python3-venv \
     gh
 
 # -----------------------------------------------------------------------------
