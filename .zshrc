@@ -5,85 +5,123 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Lines configured by zsh-newuser-install
+# History
 HISTFILE=~/.histfile
 HISTSIZE=1000000
 SAVEHIST=1000
 setopt notify
 setopt autocd
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/joel/.zshrc'
 
+# Completion
+zstyle :compinstall filename '$HOME/.zshrc'
 autoload -Uz compinit
 compinit
 # Case-insensitive tab completion
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # --- OS DETECTION ---
-if [[ -d "/data/data/com.termux" ]]; then
-    # Settings for NATIVE Termux
-    alias cat="bat --paging=never"
-    alias update="pkg update && pkg upgrade"
-    # P10k full path in Termux
-    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh
+if [[ -n "$TERMUX_VERSION" ]]; then
+    # Native Termux
+    OS_TYPE="termux"
+elif [[ -d "/data/data/com.termux" ]]; then
+    # Proot inside Termux
+    OS_TYPE="proot"
+elif grep -qi "fedora" /etc/os-release 2>/dev/null; then
+    OS_TYPE="fedora"
 else
-    # Settings for Pop!_OS or Proot Ubuntu
-    alias cat="batcat --paging=never"
-    alias update="sudo apt update && sudo apt upgrade -y"
-    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh-theme"
-fi    
-    
-# Navigation
+    # Default: Debian/Ubuntu
+    OS_TYPE="ubuntu"
+fi
+
+# OS-specific aliases
+case "$OS_TYPE" in
+    termux|proot)
+        alias cat="bat --paging=never"
+        alias update="pkg update && pkg upgrade -y"
+        ;;
+    fedora)
+        alias cat="bat --paging=never"
+        alias update="sudo dnf upgrade -y"
+        ;;
+    ubuntu)
+        alias cat="batcat --paging=never"
+        alias update="sudo apt update && sudo apt upgrade -y"
+        ;;
+esac
+
+# --- NAVIGATION ---
 alias ..="cd .."
 alias ...="cd ../.."
 alias h="cd ~"
 
-# Git (Essential for dev work)
+# --- GIT ---
 alias gs="git status"
 alias ga="git add ."
 alias gc="git commit -m"
 alias gp="git push"
 alias gl="git log --oneline --graph --all"
-#alias cat="batcat --paging=never"
 
-# System Maintenance
-#alias update="sudo apt update && sudo apt upgrade -y"
+# --- SYSTEM ---
 alias cls="clear"
-#alias ls="ls --color=auto --group-directories-first"
-#alias ll="ls -lah"
 alias ls='eza --icons --group-directories-first'
 alias ll='eza -lah --icons --group-directories-first'
-#Global
+
+# --- GLOBAL PIPE ALIASES ---
 alias -g G="| grep"
 alias -g L="| less"
 alias -g H="| head"
 
-#Scripts
-a# --- OS DETECTION ---
-if [[ -d "/data/data/com.termux" && -z "$PREFIX" ]]; then
-    # Proot
-    alias cat="bat --paging=never"
-    alias update="apt update && apt upgrade -y"
-    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh-theme"
-elif [[ -n "$TERMUX_VERSION" ]]; then
-    # Native Termux
-    alias cat="bat --paging=never"
-    alias update="pkg update && pkg upgrade"
-    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh-theme"
-else
-    # Pop!_OS
-    alias cat="batcat --paging=never"
-    alias update="sudo apt update && sudo apt upgrade -y"
-    P10K_THEME="$HOME/powerlevel10k/powerlevel10k.zsh-theme"
-fi
+# --- GIT SHORTCUTS ---
+alias ghkeys='curl -s https://github.com/Joel-J47.keys >> ~/.ssh/authorized_keys'
 
-# --- PLUGINS & THEME ---
-source "$P10K_THEME"
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# --- MISC TOOLS ---
+alias gparted='sudo -E gparted'
+alias appu='~/bin/update-apps.sh'
+
+# --- YT-DLP ---
+alias yt="noglob yt-dlp -f \"bestvideo[height=1080][vcodec^=av01]+bestaudio[acodec=opus]/bestvideo[height=1080][vcodec^=vp9]+bestaudio[acodec=opus]/bestvideo[height=1080]+bestaudio/bestvideo+bestaudio\" --merge-output-format mkv -N 4 -o \"%(title)s.%(ext)s\" --restrict-filenames"
+
+# --- TAILSCALE ---
+alias tstart='sudo systemctl start tailscaled && sudo tailscale up'
+alias tquit='sudo tailscale down && sudo systemctl stop tailscaled'
+alias tstats='tailscale status'
+tnet() { sudo tailscale logout && sudo tailscale up --login-server="${1:-https://controlplane.tailscale.com}"; }
+
+# --- TERMINAL CHAT ---
+alias msg='ncat -l 1234 --broker --chat & ncat localhost 1234'
+alias kmsg='fuser -k 1234/tcp'
+
+# --- PATH ---
+export PATH="$HOME/.local/bin:$PATH"
+
+# --- ANDROID / JAVA ---
+export JAVA_HOME="/opt/android-studio/jbr"
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$JAVA_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+export CAPACITOR_ANDROID_STUDIO_PATH=/opt/android-studio/bin/studio
+
+# --- FLUTTER ---
+export PATH="$HOME/development/flutter/bin:$PATH"
+
+# --- NVM ---
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# --- DENO ---
+[ -f "$HOME/.deno/env" ] && . "$HOME/.deno/env"
 
 # --- FZF ---
+export FZF_DEFAULT_OPTS="--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS="--preview 'cat {}'"
+
+# --- ZSH PLUGINS ---
+[[ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+[[ -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# --- POWERLEVEL10K ---
+[[ -f ~/powerlevel10k/powerlevel10k.zsh-theme ]] && source ~/powerlevel10k/powerlevel10k.zsh-theme
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# --- KIRO SHELL INTEGRATION (desktop only) ---
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)" 2>/dev/null

@@ -1,0 +1,48 @@
+Host *
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+Host vepsuite-dev
+    HostName 143.244.140.76
+    User jchambakata
+    LocalForward 0.0.0.0:5432 localhost:5432
+    LocalForward 0.0.0.0:8080 localhost:8080
+
+Host termux
+    Hostname 192.168.1.45
+    User u0_a380
+    port 8022 
+Host m1
+    HostName 192.168.1.147
+    User nwra
+
+Host m2
+    HostName 192.168.1.220
+    User nwra
+
+Host m3
+    HostName 192.168.1.177
+    User nwra
+
+Host m4
+    HostName 192.168.1.103
+    User nwra
+
+Host bems
+    HostName 143.244.140.76
+    User jchambakata
+
+
+Host drrs
+    HostName 139.59.16.17
+    User joel
+
+Host ai
+    HostName 209.97.178.125
+    User jchambakata
+    
+#Digitalocean
+Host memis
+    HostName 157.245.109.228
+    User jchambakata
+

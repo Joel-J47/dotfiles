@@ -1,0 +1,10 @@
+# SSH keys - never commit these
+id_*
+*.pem
+*.key
+known_hosts
+
+# Secrets
+.env
+*_token
+*_secret
