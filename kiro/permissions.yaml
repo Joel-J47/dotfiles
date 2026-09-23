@@ -1,0 +1,5 @@
+rules:
+  - capability: web_fetch
+    effect: allow
+  - capability: web_search
+    effect: allow
